@@ -8,7 +8,7 @@ class User(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    members = models.ArrayReferenceField(to=User, on_delete=models.CASCADE)
+    members = models.ManyToManyField('User', related_name='team_members')
 
 class Activity(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
