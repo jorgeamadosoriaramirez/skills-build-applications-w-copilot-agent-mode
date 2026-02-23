@@ -94,8 +94,11 @@ DATABASES = {
         }
     }
 }
-# CORS settings
-CORS_ALLOW_ALL_ORIGINS = True
+
+# CORS settings for Codespaces frontend
+CORS_ALLOWED_ORIGINS = [
+    "https://effective-train-4jgv46q7xqjjfxgj-3000.app.github.dev",
+]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = ['*']
 CORS_ALLOW_METHODS = ['*']

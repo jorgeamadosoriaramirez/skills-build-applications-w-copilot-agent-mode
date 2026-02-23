@@ -2,30 +2,46 @@ import React, { useEffect, useState } from 'react';
 
 const Teams = () => {
   const [teams, setTeams] = useState([]);
-  const codespace = process.env.REACT_APP_CODESPACE_NAME || 'localhost';
-  const protocol = codespace === 'localhost' ? 'http' : 'https';
-  const url = `${protocol}://${codespace}-8000.app.github.dev/api/teams/`;
+  const codespaceName = process.env.REACT_APP_CODESPACE_NAME;
+  const apiUrl = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api/teams/`
+    : 'http://localhost:8000/api/teams/';
 
   useEffect(() => {
-    fetch(url)
+    fetch(apiUrl)
       .then(res => res.json())
       .then(data => {
-        const items = data.results || data;
-        setTeams(items);
-        console.log('Teams API endpoint:', url);
-        console.log('Fetched teams:', items);
+        const results = data.results || data;
+        setTeams(results);
+        console.log('Teams API endpoint:', apiUrl);
+        console.log('Fetched teams:', results);
       })
       .catch(err => console.error('Error fetching teams:', err));
-  }, [url]);
+  }, [apiUrl]);
 
   return (
-    <div>
-      <h2>Teams</h2>
-      <ul>
-        {teams.map((team, idx) => (
-          <li key={team.id || idx}>{JSON.stringify(team)}</li>
-        ))}
-      </ul>
+    <div className="card shadow-sm">
+      <div className="card-body">
+        <h2 className="card-title mb-4">Teams</h2>
+        <div className="table-responsive">
+          <table className="table table-striped table-bordered">
+            <thead className="table-primary">
+              <tr>
+                <th>Name</th>
+                <th>Members</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teams.map((team, idx) => (
+                <tr key={idx}>
+                  <td>{team.name}</td>
+                  <td>{team.members ? team.members.length : 0}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
